@@ -1,3 +1,10 @@
+// global variable
+let countrySelect = null;
+let reasearchSelect = null;
+const wishListSet = new Set();
+
+
+
 const countryList = () => {
   fetch("https://versity-search.onrender.com/versitylist/list/")
     .then((res) => res.json())
@@ -34,29 +41,47 @@ const displayCountryData = (data) => {
 
 // click add on country 
 const addClickOnCountry = (country) => {
-  fetch(`https://versity-search.onrender.com/versitylist/list/?country=${country}`)
-  .then(res => res.json())
-  .then(data => countryDisplayOnTable(data))
-  .catch(err => console.log(err))
+  countrySelect = country
+
+  if (reasearchSelect != null){
+    fetch(`https://versity-search.onrender.com/versitylist/list/?country=${country}&reasearch=${reasearchSelect}`)
+    .then(res => res.json())
+    .then(data => countryDisplayOnTable(data))
+    .catch(err => console.log(err))
+  }
+  else{
+    fetch(`https://versity-search.onrender.com/versitylist/list/?country=${country}`)
+    .then(res => res.json())
+    .then(data => countryDisplayOnTable(data))
+    .catch(err => console.log(err))
+  }
+
 }
 
 const countryDisplayOnTable = (data) => {
 
   // parent table
   const parent = document.getElementById("table_body")
+  parent.innerHTML = "";
+
   // print all value
   data.forEach(element => {
     const tr = document.createElement("tr")
     tr.innerHTML = `
-      <th>${element.Country}</th>
+      <td>${element.Country}</td>
       <td>${element.Institute}</td>
       <td>${element.Professors}</td>
       <td>${element.Research_Area}</td>
-      <td>${element.URL}</td>
+      <td>${element.URL} <button type="button" class="btn btn-primary" onclick="clickWish(${element.id})">add to wish</button> </td>
     `
 
     parent.appendChild(tr)
   })
+}
+
+
+const clickWish = (id) => {
+  wishListSet.add(id);
 }
 
 
@@ -81,15 +106,30 @@ const displayReasearchArea = (data) => {
 }
 
 const addClickReasearchArea = (reasearch) => {
-  fetch(`https://versity-search.onrender.com/versitylist/list/?reasearch=${reasearch}`)
-  .then(res => res.json())
-  .then(data => reasearchDisplayOnTable(data))
-  .catch(err => console.log(err))
+  reasearchSelect = reasearch
+
+  if(countrySelect != null){
+    fetch(`https://versity-search.onrender.com/versitylist/list/?country=${countrySelect}&reasearch=${reasearch}`)
+    .then(res => res.json())
+    .then(data => reasearchDisplayOnTable(data))
+    .catch(err => console.log(err))
+  }
+  else{
+    fetch(`https://versity-search.onrender.com/versitylist/list/?reasearch=${reasearch}`)
+    .then(res => res.json())
+    .then(data => reasearchDisplayOnTable(data))
+    .catch(err => console.log(err))
+  }
+  
 }
 
 const reasearchDisplayOnTable = (data) => {
     // parent table
   const parent = document.getElementById("table_body")
+  parent.innerHTML = "";
+
+  // check country is true
+
   // print all value
   data.forEach(element => {
     const tr = document.createElement("tr")
