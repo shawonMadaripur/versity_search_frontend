@@ -137,6 +137,7 @@ const clickWish = (id) => {
   // put wishlistset into locatstorage
   const wishArray = Array.from(wishListSet);
   localStorage.setItem("wishList", JSON.stringify(wishArray));
+  
   document.getElementById("count_wish_number").innerText = "";
   document.getElementById("count_wish_number").innerText = wishArray.length;
   // console.log("Saved to localStorage:", wishArray);
@@ -157,15 +158,16 @@ const displayWishTable = () => {
 
   if (wishIds.length === 0) {
     console.log("Wishlist is empty");
+    loaderEnd();
     return;
   }
-
+  
   // Fetch all data
   fetch("https://versity-search.onrender.com/versitylist/list/")
     .then((res) => res.json())
     .then((data) => {
       const wishedItems = data.filter((item) => wishIds.includes(item.id));
-
+    
       const tbody = document.querySelector("tbody");
       tbody.innerHTML = "";
 
@@ -183,11 +185,19 @@ const displayWishTable = () => {
         `;
         tbody.appendChild(tr);
       });
+
+      // ////////////////////////////
+      loaderEnd();
+    
     });
+    
 };
 
 // delete item
 const deleteItem = (id) => {
+  // ////////////////////
+  loaderStart();
+  
   // console.log(id)
   const data = localStorage.getItem("wishList");
   if (!data) return;
@@ -298,14 +308,28 @@ const reasearchDisplayOnTable = (data) => {
   });
 };
 
-const loading = () => {
-  window.addEventListener("load", () => {
-  const loader = document.querySelector(".loader");
-  loader.classList.add("loader_hidden");
-})
+// loader add
+// window.addEventListener("load", () => {
+//   const loader = document.querySelector(".loader");
+//   loader.classList.add("loader_hidden");
+
+//   loader.addEventListener("transitionend", () => {
+//     document.body.removeChild("loader");
+//   })
+// })
+
+const loaderStart = () => {
+  const loader = document.querySelector(".loader")
+  // loader.style.display = 'block';
+  loader.classList.remove("loader_hidden");
+  
 }
 
-// add loader
-loading();
+const loaderEnd = () => {
+  const loader = document.querySelector(".loader");
+  //  loader.style.display = 'none';
+  loader.classList.add("loader_hidden");
+}
 
+// call function
 countryList();

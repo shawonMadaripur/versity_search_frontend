@@ -16,6 +16,11 @@
   visibility: hidden;
 }
 
+/* .loader_visibility{
+  opacity: 1;
+  visibility: visible;
+} */
+
 .loader::after{
   content: "";
   width: 100px;
