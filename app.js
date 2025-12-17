@@ -1,7 +1,10 @@
 // global variable
 let countrySelect = null;
 let reasearchSelect = null;
-const wishListSet = new Set();
+
+// Initialize wishListSet from localStorage
+const storedWishList = JSON.parse(localStorage.getItem("wishList")) || [];
+const wishListSet = new Set(storedWishList);
 
 const countryList = () => {
   fetch("https://versity-search.onrender.com/versitylist/list/")
@@ -137,10 +140,9 @@ const clickWish = (id) => {
   // put wishlistset into locatstorage
   const wishArray = Array.from(wishListSet);
   localStorage.setItem("wishList", JSON.stringify(wishArray));
-  
-  document.getElementById("count_wish_number").innerText = "";
-  document.getElementById("count_wish_number").innerText = wishArray.length;
-  // console.log("Saved to localStorage:", wishArray);
+
+  // show badge number
+  showBadgeNumberOnLoad();
 };
 
 // get wishArray data from local storage
@@ -209,6 +211,9 @@ const deleteItem = (id) => {
   // set list into local store
   localStorage.setItem("wishList", JSON.stringify(wishList));
   displayWishTable();
+
+  // show badge number
+  showBadgeNumberOnLoad();
 };
 
 // if wish.html open
@@ -331,5 +336,17 @@ const loaderEnd = () => {
   loader.classList.add("loader_hidden");
 }
 
+// show badge number on load
+const showBadgeNumberOnLoad = () => {
+  // document.getElementById("count_wish_number").innerText = "";
+  // const value = JSON.parse(localStorage.getItem("wishList")).length;
+  // document.getElementById("count_wish_number").innerText = value;
+
+  const wishList = JSON.parse(localStorage.getItem("wishList")) || [];
+  document.getElementById("count_wish_number").innerText = wishList.length;
+}
+
+
 // call function
 countryList();
+showBadgeNumberOnLoad();

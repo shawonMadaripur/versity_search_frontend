@@ -39,3 +39,19 @@
     transform: rotate(1turn);
   }
 }
+
+
+/* ...existing code... */
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 1040; /* higher than footer */
+}
+
+/* Add bottom padding to body or main content so data is not hidden behind the footer */
+body {
+  padding-top: 70px;    /* Adjust this value to match your navbar's height */
+}
