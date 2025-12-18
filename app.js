@@ -45,7 +45,19 @@ const displayCountryData = (data) => {
 const addClickOnCountry = (country) => {
   countrySelect = country;
 
-  if (reasearchSelect != null) {
+  // select dropdown toggle
+  const countryDropdownToggle = document.getElementById("countryDropdownToggle");
+  if (countryDropdownToggle) {
+    countryDropdownToggle.textContent = country === 'allCountry' ? 'All Countries' : country;
+  }
+
+  if(country === 'allCountry'){
+    fetch(`https://versity-search.onrender.com/versitylist/list/`)
+      .then((res) => res.json())
+      .then((data) => countryDisplayOnTable(data))
+      .catch((err) => console.log(err));
+  }
+  else if (reasearchSelect != null) {
     fetch(
       `https://versity-search.onrender.com/versitylist/list/?country=${country}&reasearch=${reasearchSelect}`
     )
@@ -88,10 +100,11 @@ const countryDisplayOnTable = (data) => {
         <td>${element.Professors}</td>
         <td>${element.Research_Area}</td>
         <td>
-          <a target="_blank" href="${element.URL}">${element.URL}</a>
-          <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
-            Add to Wishlist
-          </button>
+          <a target="_blank" href="${element.URL}">Link</a>
+        </td>
+        <td>
+         <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
+          Add to Wishlist </button>
         </td>
       `;
     }
@@ -103,10 +116,11 @@ const countryDisplayOnTable = (data) => {
         <td>${element.Professors}</td>
         <td>${element.Research_Area}</td>
         <td>
-          <a target="_blank" href="${element.URL}">${element.URL}</a>
-          <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
-            Add to Wishlist
-          </button>
+          <a target="_blank" href="${element.URL}">Link</a>
+        </td>
+        <td>
+         <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
+          Add to Wishlist </button>
         </td>
       `;
     }
@@ -118,10 +132,11 @@ const countryDisplayOnTable = (data) => {
         <td>${element.Professors}</td>
         <td>${element.Research_Area}</td>
         <td>
-          <a target="_blank" href="${element.URL}">${element.URL}</a>
-          <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
-            Add to Wishlist
-          </button>
+          <a target="_blank" href="${element.URL}">Link</a>
+        </td>
+        <td>
+         <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
+          Add to Wishlist </button>
         </td>
       `;
     }
@@ -181,7 +196,7 @@ const displayWishTable = () => {
           <td>${item.Professors}</td>
           <td>${item.Research_Area}</td>
           <td>
-          <a href="${item.URL}" target="_blank">${item.URL}</a>
+          <a href="${item.URL}" target="_blank">Link</a>
           <button type="button" class="btn btn-danger" onclick="deleteItem(${item.id})">Delete</button>
           </td>
         `;
@@ -246,6 +261,12 @@ const displayReasearchArea = (data) => {
 const addClickReasearchArea = (reasearch) => {
   reasearchSelect = reasearch;
 
+  // select dropdown toggle
+  const researchDropdownToggle = document.getElementById("researchDropdownToggle");
+  if (researchDropdownToggle) {
+    researchDropdownToggle.textContent = reasearch;
+  }
+
   if (countrySelect != null) {
     fetch(
       `https://versity-search.onrender.com/versitylist/list/?country=${countrySelect}&reasearch=${reasearch}`
@@ -286,7 +307,14 @@ const reasearchDisplayOnTable = (data) => {
       <td></td>
       <td>${element.Professors}</td>
       <td>${element.Research_Area}</td>
-      <td>${element.URL} <button type="button" class="btn btn-primary" onclick="clickWish(${element.id})">add to wish</button></td>`;
+      <td>
+      <a target="_blank" href="${element.URL}">Link</a>
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
+        Add to Wishlist </button>
+      </td>
+      `;
     }
     else if(previousCountry === currentCountry){
       tr.innerHTML = `
@@ -294,7 +322,13 @@ const reasearchDisplayOnTable = (data) => {
       <td>${element.Institute}</td>
       <td>${element.Professors}</td>
       <td>${element.Research_Area}</td>
-      <td>${element.URL} <button type="button" class="btn btn-primary" onclick="clickWish(${element.id})">add to wish</button></td>`;
+      <td>
+      <a target="_blank" href="${element.URL}">Link</a>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
+        Add to Wishlist </button>
+      </td>
+      `;
     }
     else{
       tr.innerHTML = `
@@ -302,7 +336,14 @@ const reasearchDisplayOnTable = (data) => {
       <td>${element.Institute}</td>
       <td>${element.Professors}</td>
       <td>${element.Research_Area}</td>
-      <td>${element.URL} <button type="button" class="btn btn-primary" onclick="clickWish(${element.id})">add to wish</button></td>`;
+      <td>
+      <a target="_blank" href="${element.URL}">Link</a>
+      </td>
+      <td>
+        <button type="button" class="btn btn-primary btn-sm" onclick="clickWish(${element.id})">
+        Add to Wishlist </button>
+      </td>
+      `;
     }
     
     parent.appendChild(tr);
@@ -345,6 +386,7 @@ const showBadgeNumberOnLoad = () => {
   const wishList = JSON.parse(localStorage.getItem("wishList")) || [];
   document.getElementById("count_wish_number").innerText = wishList.length;
 }
+
 
 
 // call function
